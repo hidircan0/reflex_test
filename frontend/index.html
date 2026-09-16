@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Refleks Testi</title>
+    <link rel="stylesheet" href="/css/style.css?v=3" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <nav class="topbar" aria-label="Uygulama bilgileri">
+        <a class="brand" href="/" aria-label="Reflex Grid ana sayfa">
+          <span class="brand-mark" aria-hidden="true">RG</span>
+          <span>REFLEX<span>GRID</span></span>
+        </a>
+        <div class="live-badge">
+          <span class="live-dot" aria-hidden="true"></span>
+          Sistem çevrimiçi
+        </div>
+      </nav>
+
+      <main class="app">
+        <section class="hero-card">
+          <header class="header">
+            <p class="eyebrow"><span>01</span> Reaction challenge</p>
+            <h1>Ne kadar <em>hızlısın?</em></h1>
+            <p class="lede">
+              Işıkları takip et. Yeşili gördüğün anda tetikleyiciye bas.
+            </p>
+          </header>
+
+          <label class="nick">
+            <span class="field-label">Sürücü adı</span>
+            <span class="input-shell">
+              <span class="driver-icon" aria-hidden="true">DR</span>
+              <input
+                id="nickname"
+                type="text"
+                maxlength="24"
+                placeholder="Takma adını yaz"
+                autocomplete="nickname"
+                spellcheck="false"
+              />
+            </span>
+          </label>
+
+          <section class="gantry" aria-label="F1 start ışıkları">
+            <div class="gantry-label">
+              <span>START SEQUENCE</span>
+              <span>5 LIGHTS</span>
+            </div>
+            <div class="gantry-bar">
+              <div id="lights" class="lights" data-state="idle"></div>
+            </div>
+          </section>
+
+          <section class="readout" aria-live="polite">
+            <span class="readout-line" aria-hidden="true"></span>
+            <p id="status" class="status">Hazır olduğunda Başla'ya bas.</p>
+            <p id="result" class="result" hidden></p>
+            <span class="readout-line" aria-hidden="true"></span>
+          </section>
+
+          <section class="controls">
+            <button id="start-btn" class="btn btn-start" type="button">
+              <span class="btn-icon" aria-hidden="true">▶</span>
+              Yeni tur
+              <span class="btn-key">Enter</span>
+            </button>
+            <button id="trigger-btn" class="btn btn-trigger" type="button">
+              <span class="trigger-dot" aria-hidden="true"></span>
+              Tetikle
+              <span class="btn-key">Space</span>
+            </button>
+          </section>
+        </section>
+
+        <section class="scoreboard" aria-label="Skorboard">
+          <div class="scoreboard-head">
+            <div>
+              <p class="eyebrow"><span>02</span> Global ranking</p>
+              <h2>Liderlik Tablosu</h2>
+            </div>
+            <p class="board-note">En hızlı 20 sürücü</p>
+          </div>
+          <div class="scoreboard-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sıra</th>
+                  <th>Sürücü</th>
+                  <th>Reaksiyon</th>
+                  <th>Kayıt zamanı</th>
+                </tr>
+              </thead>
+              <tbody id="scoreboard-body"></tbody>
+            </table>
+          </div>
+          <p id="scoreboard-empty" class="scoreboard-empty">Henüz skor yok.</p>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>REFLEX GRID / 2026</span>
+        <span>Milisaniyeler fark yaratır.</span>
+      </footer>
+    </div>
+
+    <dialog id="score-update-dialog" class="score-dialog">
+      <form method="dialog">
+        <div class="dialog-icon" aria-hidden="true">!</div>
+        <p class="eyebrow"><span>SKOR KAYITLI</span></p>
+        <h2><strong id="dialog-nickname"></strong> zaten yarıştı</h2>
+        <p class="dialog-copy">
+          Bu takma adına ait tek bir skor tutulur. Kayıtlı süreyi yeni
+          sonucunla değiştirmek ister misin?
+        </p>
+        <div class="score-compare">
+          <div>
+            <span>Mevcut süre</span>
+            <strong id="dialog-current-score">— ms</strong>
+          </div>
+          <span class="compare-arrow" aria-hidden="true">→</span>
+          <div>
+            <span>Yeni süre</span>
+            <strong id="dialog-new-score">— ms</strong>
+          </div>
+        </div>
+        <div class="dialog-actions">
+          <button class="dialog-btn dialog-cancel" value="cancel">
+            Vazgeç
+          </button>
+          <button class="dialog-btn dialog-confirm" value="confirm">
+            Süreyi güncelle
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="/js/main.js?v=4"></script>
+  </body>
+</html>
