@@ -105,7 +105,7 @@ def main() -> None:
             session,
             """
             const input = document.getElementById("nickname");
-            input.value = "hidircan";
+            input.value = "e2e_rank_check";
             input.dispatchEvent(new Event("input", { bubbles: true }));
             """,
         )
@@ -122,9 +122,15 @@ def main() -> None:
         wait_state(session, "go", timeout=14.0)
         click(session, "#trigger-btn")
         wait_state(session, "result")
-        result = text_of(session, "#result")
-        if not result.startswith("Tepki süreniz:") or not result.endswith("ms"):
-            raise SystemExit(f"unexpected result text: {result!r}")
+        deadline = time.monotonic() + 5
+        result = ""
+        while time.monotonic() < deadline:
+            result = text_of(session, "#result")
+            if "oldun!" in result:
+                break
+            time.sleep(0.1)
+        if not result.startswith("Tepki süreniz:") or "oldun!" not in result:
+            raise SystemExit(f"result did not show placement: {result!r}")
 
         deadline = time.monotonic() + 5
         rows = 0

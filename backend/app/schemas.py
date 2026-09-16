@@ -3,20 +3,26 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field, field_validator
 
-NICKNAME_RE = re.compile(r"^[A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]{2,24}$")
+NICKNAME_RE = re.compile(
+    r"^[A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]+(?: [A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]+)*$"
+)
+
+
+def normalize_nickname(value: str) -> str:
+    nick = " ".join(str(value).split())
+    if not (2 <= len(nick) <= 24) or not NICKNAME_RE.fullmatch(nick):
+        raise ValueError("nickname must be 2-24 letters, numbers, or spaces")
+    return nick
 
 
 class ScoreCreate(BaseModel):
     nickname: str = Field(min_length=2, max_length=24)
     reaction_ms: int = Field(gt=0, le=10000)
 
-    @field_validator("nickname")
+    @field_validator("nickname", mode="before")
     @classmethod
-    def normalize_nickname(cls, value: str) -> str:
-        nick = value.strip()
-        if not NICKNAME_RE.fullmatch(nick):
-            raise ValueError("nickname must be alphanumeric")
-        return nick
+    def collapse_nickname(cls, value: str) -> str:
+        return normalize_nickname(value)
 
 
 class ScoreUpdate(BaseModel):

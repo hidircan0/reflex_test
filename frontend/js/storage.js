@@ -2,14 +2,14 @@ import { NICKNAME_KEY } from "./config.js";
 
 export function loadNickname() {
   try {
-    return (localStorage.getItem(NICKNAME_KEY) ?? "").trim();
+    return normalizeNickname(localStorage.getItem(NICKNAME_KEY) ?? "");
   } catch {
     return "";
   }
 }
 
 export function saveNickname(value) {
-  const nickname = value.trim();
+  const nickname = normalizeNickname(value);
   try {
     if (nickname) {
       localStorage.setItem(NICKNAME_KEY, nickname);
@@ -22,7 +22,19 @@ export function saveNickname(value) {
   return nickname;
 }
 
+export function normalizeNickname(value) {
+  return String(value ?? "")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
 export function isValidNickname(value) {
-  const nickname = value.trim();
-  return /^[A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]{2,24}$/.test(nickname);
+  const nickname = normalizeNickname(value);
+  return (
+    nickname.length >= 2 &&
+    nickname.length <= 24 &&
+    /^[A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]+(?: [A-Za-z0-9ÇĞİÖŞÜçğıöşü_-]+)*$/.test(
+      nickname,
+    )
+  );
 }

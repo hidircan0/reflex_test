@@ -11,8 +11,8 @@ export class ScoreApi {
     this._baseUrl = baseUrl;
   }
 
-  async list(limit = 20) {
-    const response = await fetch(`${this._baseUrl}/scores?limit=${limit}`);
+  async list() {
+    const response = await fetch(`${this._baseUrl}/scores`);
     if (!response.ok) {
       throw new Error("scoreboard fetch failed");
     }

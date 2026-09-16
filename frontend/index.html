@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Refleks Testi</title>
-    <link rel="stylesheet" href="/css/style.css?v=3" />
+    <link rel="stylesheet" href="/css/style.css?v=6" />
   </head>
   <body>
     <div class="page-shell">
@@ -56,8 +56,10 @@
 
           <section class="readout" aria-live="polite">
             <span class="readout-line" aria-hidden="true"></span>
-            <p id="status" class="status">Hazır olduğunda Başla'ya bas.</p>
-            <p id="result" class="result" hidden></p>
+            <div class="readout-copy">
+              <p id="status" class="status">Hazır olduğunda Başla'ya bas.</p>
+              <p id="result" class="result" hidden></p>
+            </div>
             <span class="readout-line" aria-hidden="true"></span>
           </section>
 
@@ -65,12 +67,10 @@
             <button id="start-btn" class="btn btn-start" type="button">
               <span class="btn-icon" aria-hidden="true">▶</span>
               Yeni tur
-              <span class="btn-key">Enter</span>
             </button>
             <button id="trigger-btn" class="btn btn-trigger" type="button">
               <span class="trigger-dot" aria-hidden="true"></span>
               Tetikle
-              <span class="btn-key">Space</span>
             </button>
           </section>
         </section>
@@ -81,7 +81,7 @@
               <p class="eyebrow"><span>02</span> Global ranking</p>
               <h2>Liderlik Tablosu</h2>
             </div>
-            <p class="board-note">En hızlı 20 sürücü</p>
+            <p class="board-note">Tüm sürücüler</p>
           </div>
           <div class="scoreboard-table-wrap">
             <table>
@@ -137,6 +137,6 @@
       </form>
     </dialog>
 
-    <script type="module" src="/js/main.js?v=4"></script>
+    <script type="module" src="/js/main.js?v=6"></script>
   </body>
 </html>

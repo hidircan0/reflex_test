@@ -48,6 +48,25 @@ export class ReflexView {
     this._nickname.value = value;
   }
 
+  showPlacement(reactionMs, rank, { saved = true } = {}) {
+    this._status.textContent = "";
+    this._result.hidden = false;
+    this._result.replaceChildren();
+
+    if (!saved) {
+      this._result.textContent = `Bu tur kaydedilmedi · Mevcut sıran: ${rank}.`;
+      return;
+    }
+
+    this._result.append(
+      document.createTextNode(`Tepki süreniz: ${reactionMs} ms`),
+    );
+    const placement = document.createElement("span");
+    placement.className = "result-placement";
+    placement.textContent = `${rank}. oldun!`;
+    this._result.append(placement);
+  }
+
   render({ state, reactionMs, litCount }, { canStart }) {
     this._lights.dataset.state = state;
     this._readout.dataset.state = state;

@@ -1,24 +1,23 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_session
 from app.models import Score
-from app.schemas import NICKNAME_RE, ScoreCreate, ScoreRead, ScoreUpdate
+from app.schemas import ScoreCreate, ScoreRead, ScoreUpdate, normalize_nickname
 
 router = APIRouter(prefix="/api/scores", tags=["scores"])
 
 
 @router.get("", response_model=list[ScoreRead])
 async def list_scores(
-    limit: int = Query(default=20, ge=1, le=100),
     session: AsyncSession = Depends(get_session),
 ) -> list[Score]:
     result = await session.execute(
-        select(Score).order_by(Score.reaction_ms.asc(), Score.created_at.asc()).limit(limit)
+        select(Score).order_by(Score.reaction_ms.asc(), Score.created_at.asc())
     )
     return list(result.scalars().all())
 
@@ -54,9 +53,10 @@ async def update_score(
     payload: ScoreUpdate,
     session: AsyncSession = Depends(get_session),
 ) -> Score:
-    normalized_nickname = nickname.strip()
-    if not NICKNAME_RE.fullmatch(normalized_nickname):
-        raise HTTPException(status_code=422, detail="invalid nickname")
+    try:
+        normalized_nickname = normalize_nickname(nickname)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail="invalid nickname") from exc
 
     score = await _find_score(session, normalized_nickname)
     if score is None:

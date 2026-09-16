@@ -16,7 +16,7 @@ export class ScoreboardView {
     const fragment = document.createDocumentFragment();
     scores.forEach((score, index) => {
       const row = document.createElement("tr");
-      if (score.nickname === currentNickname) {
+      if (score.nickname.toLowerCase() === currentNickname.toLowerCase()) {
         row.classList.add("is-you");
       }
       const when = new Date(score.created_at);

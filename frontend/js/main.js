@@ -43,8 +43,10 @@ async function refreshScoreboard() {
   try {
     const scores = await api.list();
     scoreboard.render(scores, nickname);
+    return scores;
   } catch {
     scoreboard.showError();
+    return null;
   }
 }
 
@@ -53,8 +55,8 @@ async function submitScore(reactionMs) {
     return;
   }
   try {
-    await api.submit(nickname, reactionMs);
-    await refreshScoreboard();
+    const score = await api.submit(nickname, reactionMs);
+    await showPlacement(score, reactionMs);
   } catch (error) {
     if (error instanceof NicknameExistsError) {
       const shouldUpdate = await scoreDialog.confirm({
@@ -64,15 +66,32 @@ async function submitScore(reactionMs) {
       });
       if (shouldUpdate) {
         try {
-          await api.update(nickname, reactionMs);
-          await refreshScoreboard();
+          const score = await api.update(nickname, reactionMs);
+          await showPlacement(score, reactionMs);
         } catch {
           scoreboard.showError();
         }
+      } else {
+        await showPlacement(error.existingScore, reactionMs, { saved: false });
       }
       return;
     }
     scoreboard.showError();
+  }
+}
+
+async function showPlacement(score, reactionMs, options) {
+  const scores = await refreshScoreboard();
+  if (!scores) {
+    return;
+  }
+
+  const rank = scores.findIndex((item) => item.id === score.id) + 1;
+  const isCurrentResult =
+    lastSnapshot.state === GameState.RESULT &&
+    lastSnapshot.reactionMs === reactionMs;
+  if (rank > 0 && isCurrentResult) {
+    view.showPlacement(reactionMs, rank, options);
   }
 }
 
